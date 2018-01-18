@@ -20,7 +20,11 @@ download() {
     for i in "${(@f)$(print ${1} | jq '.items[].downloadUrl')}"
     do
         url=${${i#\"}%\"}
-        curl -o $(basename ${url}) ${url}
+        file=$(basename ${url})
+        if [[ ! -e ${file} ]]
+        then
+            curl -o ${file} ${url}
+        fi
     done
 }
 
