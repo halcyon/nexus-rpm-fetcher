@@ -1,5 +1,17 @@
 #!/usr/bin/env zsh
 
+set -e
+
+usage() {
+    print "Usage: ./fetcher.sh <nexus-url>"
+}
+
+if [[ -z ${1} ]]
+then
+    usage
+    exit 1
+fi
+
 REPO=${1}
 REST_PATH="/service/siesta/rest/beta/search/assets?"
 PARAMS="maven.extension=rpm"
