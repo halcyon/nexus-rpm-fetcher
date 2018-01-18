@@ -3,12 +3,12 @@
 set -e
 
 usage() {
-    print "Usage: ./fetcher.sh <nexus-url>"
+    print "${1} <nexus-url>"
 }
 
 if [[ -z ${1} ]]
 then
-    usage
+    usage ${0}
     exit 1
 fi
 
