@@ -3,7 +3,7 @@
 set -e
 
 usage() {
-    print "${1} -u <nexus-url> [-e <rpm> -p <path>]"
+    print "${1} -u <nexus-url> [-e <asset-extension> -p <REST path>]"
 }
 
 while getopts ":he:p:u:" opt; do

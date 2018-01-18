@@ -9,5 +9,7 @@ Finds and downloads all rpms from a nexus repository
 
 # Usage
 ```
-./fetcher.sh -u <nexus-url> [-e <rpm> -p <path>]
+./fetcher.sh -u <nexus-url> [-e <asset-extension> -p <REST path>]
+
+e.g. ./fetcher.sh -u https://your-nexus-repo.com
 ```
