@@ -9,5 +9,5 @@ Finds and downloads all rpms from a nexus repository
 
 # Usage
 ```
-./fetcher.sh nexus-url
+./fetcher.sh -u <nexus-url> [-e <rpm> -p <path>]
 ```
