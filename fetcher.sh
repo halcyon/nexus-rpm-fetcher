@@ -6,7 +6,7 @@ usage() {
     print "${1} -u <nexus-url> [-e <asset-extension> -p <REST path>]"
 }
 
-while getopts ":he:p:u:" opt; do
+while getopts "he:p:u:" opt; do
   case ${opt} in
     e)
         MAVEN_EXTENSION="maven.extension=${OPTARG}"
