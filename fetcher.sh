@@ -40,7 +40,7 @@ then
 fi
 
 MAVEN_EXTENSION=${MAVEN_EXTENSION:-"maven.extension=rpm"}
-REST_PATH=${REST_PATH:-"/service/siesta/rest/beta/search/assets?"}
+REST_PATH=${REST_PATH:-"/service/rest/beta/search/assets?"}
 
 download() {
     for i in "${(@f)$(print ${1} | jq '.items[].downloadUrl')}"
