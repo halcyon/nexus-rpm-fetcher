@@ -4,8 +4,10 @@ Finds and downloads all rpms from a nexus repository
 
 # Dependencies
 
-- [zsh](http://zsh.sourceforge.net/)
+- [bash](http://zsh.sourceforge.net/)
 - [jq](https://stedolan.github.io/jq/)
+- [wget](https://www.gnu.org/software/wget/)
+- [curl](https://curl.haxx.se/)
 
 # Usage
 ```

@@ -1,9 +1,7 @@
-#!/usr/bin/env zsh
-
-set -e
+#!/bin/bash
 
 usage() {
-    print "${1} -u <nexus-url> [-e <asset-extension> -p <REST path>]"
+    echo "${1} -u <nexus-url> [-e <asset-extension> -p <REST path>]"
 }
 
 while getopts "he:p:u:" opt; do
@@ -42,40 +40,15 @@ fi
 MAVEN_EXTENSION=${MAVEN_EXTENSION:-"maven.extension=rpm"}
 REST_PATH=${REST_PATH:-"/service/rest/beta/search/assets?"}
 
-download() {
-    for i in "${(@f)$(print ${1} | jq '.items[].downloadUrl')}"
-    do
-        url=${${i#\"}%\"}
-        file=$(basename ${url})
-        if [[ ! -e ${file} ]]
-        then
-            curl -o ${file} ${url}
-        fi
-    done
-}
+RESPONSE=`curl -s -L -X GET --header 'Accept: application/json' ${NEXUS_URL}${REST_PATH}${MAVEN_EXTENSION}?maven.extension=rpm`
+RPMS=`echo ${RESPONSE} | jq '.items[].downloadUrl' | sed -e 's/"//g'`
+CTTOK=`echo ${RESPONSE} | jq '.continuationToken' | sed -e 's/"//g'`
 
-continuation() {
-    print "$(print ${1} | jq '.continuationToken')"
-}
+wget -nc ${RPMS};
 
-exit_on_err_or_finished() {
-    if [[ -z "$(continuation ${1})" ]]
-    then
-        exit 1
-    elif [[ $(continuation ${1}) == "null" ]]
-    then
-        exit 0
-    fi
-}
-
-page=$(curl -X GET --header 'Accept: application/json' "${NEXUS_URL}${REST_PATH}${MAVEN_EXTENSION}")
-download ${page}
-exit_on_err_or_finished ${page}
-
-while true
-do
-    continuation_token=$(continuation ${page})
-    page=$(curl -X GET --header 'Accept: application/json' "${NEXUS_URL}${REST_PATH}${MAVEN_EXTENSION}&continuationToken=${continuation_token}")
-    download ${page}
-    exit_on_err_or_finished ${page}
+while [ -n "${CTTOK}" ]; do
+  RESPONSE=`curl -s -L -X GET --header 'Accept: application/json' ${NEXUS_URL}${REST_PATH}${MAVEN_EXTENSION}?maven.extension=rpm\&continuationToken=${CTTOK}`
+  RPMS=`echo ${RESPONSE} | jq '.items[].downloadUrl' 2>/dev/null | sed -e 's/"//g'`
+  CTTOK=`echo ${RESPONSE} | jq '.continuationToken' 2>/dev/null | sed -e 's/"//g'`
+  wget -nc ${RPMS};
 done
